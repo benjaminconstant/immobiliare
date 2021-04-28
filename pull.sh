@@ -1,5 +1,5 @@
 source `which virtualenvwrapper.sh`
-workon invernizzi-CMS
+workon immobiliare
 git pull
 cd django
 pip install -r requirements.txt
