@@ -1,0 +1,11 @@
+{
+  "vetur.validation.template": false,
+  "vetur.format.enable": false,
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "python.pythonPath": "/home/ghiga/.virtualenvs/immobiliare/bin/python",
+  "python.formatting.provider": "autopep8",
+  "[python]": {
+    "editor.formatOnSave": true
+  },
+  "python.formatting.autopep8Args": ["--max-line-length=200"]  
+}
