@@ -44,6 +44,8 @@ class ImmobiliareSpider(scrapy.Spider):
 
         try:
             h['costs'] = response.xpath('//dt[text()[contains(., "spese condominio")]]/following-sibling::dd/node()').get().strip()
+            if h['costs'] == 'Nessuna spesa condominiale':
+                h['costs'] = 0
         except:
             h['costs'] = 'N.D.'
 

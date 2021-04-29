@@ -6,6 +6,6 @@ from .models import House
 class HouseAdmin(admin.ModelAdmin):
     ordering = ['price']
     search_fields = ['title', 'text', 'id', 'link']
-    list_display = ['title', 'mq', 'price', 'price_mq', 'costs']
+    list_display = ['date_publish', 'title', 'mq', 'price', 'price_mq', 'costs']
 
     readonly_fields = ['created', 'updated']

@@ -25,6 +25,24 @@
         </h4>
         <span>ultimo aggiornamento: {{ lastUpdate }}</span>
       </div>
+      <div class="row q-pb-lg items-center fit text-secondary q-gutter-md">
+        <div class="col q-gutter-md">
+          <FilterInput field-name="price_min" field-label="Prezzo MIN" />
+          <FilterInput field-name="price_max" field-label="Prezzo MAX" />
+        </div>
+        <div class="col q-gutter-md">
+          <FilterInput field-name="price_mq_min" field-label="Prezzo MQ MIN" />
+          <FilterInput field-name="price_mq_max" field-label="Prezzo MQ MAX" />
+        </div>
+        <div class="col q-gutter-md">
+          <FilterInput field-name="mq_min" field-label="MQ MIN" />
+          <FilterInput field-name="mq_max" field-label="MQ MAX" />
+        </div>
+        <div class="col q-gutter-md">
+          <FilterInput field-name="costs_min" field-label="Spese MIN" />
+          <FilterInput field-name="costs_max" field-label="Spese MAX" />
+        </div>
+      </div>
     </template>
     <template #body-cell-link="props">
       <q-td>
@@ -55,13 +73,15 @@
 </template>
 
 <script>
+import FilterInput from 'components/FilterInput'
+import { mapState } from 'vuex'
 import { date } from 'quasar'
 export default {
   name: 'Table',
+  components: { FilterInput },
   data () {
     return {
       filter: '',
-      houses: [],
       pagination: {
         sortBy: 'date_publish',
         descending: true,
@@ -121,16 +141,17 @@ export default {
     }
   },
   computed: {
+    ...mapState(['houses']),
     lastUpdate () {
       return date.formatDate(this.houses[0]?.updated, 'DD/MM/YYYY - HH:mm')
     }
   },
   mounted () {
-    this.$axios.get('houses/').then(r => (this.houses = r.data))
+    this.$store.dispatch('getHouses')
   },
   methods: {
     filterFn (data, string) {
-      // funzione per cercare i tutto l'oggetto
+      // funzione per cercare in tutto l'oggetto
       const results = []
       for (const house of this.houses) {
         for (const val of Object.values(house)) {
