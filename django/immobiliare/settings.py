@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 from decouple import config
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 PRODUCTION = config('PRODUCTION', default=False)
 CORS_ORIGIN_ALLOW_ALL = True
