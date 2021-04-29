@@ -63,7 +63,7 @@ class ImmobiliareSpider(scrapy.Spider):
             else:
                 h['costs'] = int(h['costs'].replace('€ ', '').replace('.', '').replace('/', '').replace('mese', ''))
         except:
-            h['costs'] = None
+            h['costs'] = -1
 
         House.objects.create(
             id=h['uid'],
