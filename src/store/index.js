@@ -39,6 +39,10 @@ const Store = new Vuex.Store({
   actions: {
     getHouses ({ commit, getters }) {
       api.get('houses/' + getters.queryParams).then(r => commit('SET_HOUSES', r.data))
+    },
+    putInteresting ({ commit }, house) {
+      house.is_interesting = !house.is_interesting
+      api.put('houses/' + house.id + '/', house)
     }
   },
   getters: {

@@ -9,7 +9,7 @@ class HouseViewSet(viewsets.ModelViewSet):
     filterset_class = HouseFilter
     queryset = House.objects.all().order_by('-price')
     serializer_class = HouseSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'put']
 
 
 def index(request, path=''):

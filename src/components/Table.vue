@@ -10,7 +10,6 @@
     :columns="columns"
     row-key="id"
     :filter="filter"
-    :filter-method="filterFn"
   >
     <template #top>
       <div class="row justify-around fit items-center text-secondary">
@@ -69,6 +68,16 @@
         </q-tooltip>
       </q-td>
     </template>
+    <template #body-cell-is_interesting="props">
+      <q-td style="max-width: 400px">
+        <q-icon
+          :color="props.row.is_interesting ? 'warning' : 'grey'"
+          name="star"
+          size="lg"
+          @click="$store.dispatch('putInteresting', props.row)"
+        />
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -107,6 +116,7 @@ export default {
           label: 'Spese',
           align: 'left',
           field: row => row.costs,
+          format: val => this.formatCurrency(val),
           sortable: true
         },
         {
@@ -121,6 +131,7 @@ export default {
           label: 'Prezzo MQ',
           align: 'left',
           field: row => row.price_mq,
+          format: val => this.formatCurrency(val),
           sortable: true
         },
         {
@@ -128,6 +139,7 @@ export default {
           label: 'Prezzo',
           align: 'left',
           field: row => row.price,
+          format: val => this.formatCurrency(val),
           sortable: true
         },
         {
@@ -136,6 +148,23 @@ export default {
           align: 'left',
           field: row => row.link,
           sortable: true
+        },
+        // definita per poter utilizzare ricerca, non visibile
+        {
+          name: 'text',
+          headerStyle: 'display: none',
+          style: 'display: none',
+          label: 'Descrizione',
+          align: 'left',
+          field: row => row.text,
+          sortable: true
+        },
+        {
+          name: 'is_interesting',
+          label: '',
+          align: 'left',
+          field: row => row.is_interesting,
+          sortable: true
         }
       ]
     }
@@ -143,25 +172,16 @@ export default {
   computed: {
     ...mapState(['houses']),
     lastUpdate () {
-      return date.formatDate(this.houses[0]?.updated, 'DD/MM/YYYY - HH:mm')
+      return date.formatDate(new Date(Math.max(...this.houses.map(h => new Date(h.updated)))), 'DD/MM/YYYY - HH:mm')
     }
   },
   mounted () {
     this.$store.dispatch('getHouses')
+    setInterval(() => this.$store.dispatch('getHouses'), 10000)
   },
   methods: {
-    filterFn (data, string) {
-      // funzione per cercare in tutto l'oggetto
-      const results = []
-      for (const house of this.houses) {
-        for (const val of Object.values(house)) {
-          if (val.toString().toLowerCase().includes(string.toLowerCase())) {
-            results.push(house)
-            break
-          }
-        }
-      }
-      return results
+    formatCurrency (val) {
+      return val !== null ? val.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) : 'N.D.'
     }
   }
 }
