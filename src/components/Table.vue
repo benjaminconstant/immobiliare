@@ -85,6 +85,13 @@
         </span>
       </q-td>
     </template>
+    <template #body-cell-costs="props">
+      <q-td>
+        <span :class="costsColor(props.row.costs)">
+          {{ formatCurrency(props.row.costs) }}
+        </span>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -204,7 +211,24 @@ export default {
         return 'text-red'
       }
       if (value >= 1500) {
-        return 'text-indigo-10'
+        return 'text-deep-purple-14'
+      }
+    },
+    costsColor (value) {
+      if (value < 25) {
+        return 'text-green-10'
+      }
+      if (value < 50) {
+        return 'text-green-5'
+      }
+      if (value < 75) {
+        return 'text-yellow'
+      }
+      if (value < 100) {
+        return 'text-red'
+      }
+      if (value >= 100) {
+        return 'text-deep-purple-14'
       }
     }
   }
