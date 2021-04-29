@@ -69,13 +69,20 @@
       </q-td>
     </template>
     <template #body-cell-is_interesting="props">
-      <q-td style="max-width: 400px">
+      <q-td>
         <q-icon
           :color="props.row.is_interesting ? 'warning' : 'grey'"
           name="star"
           size="lg"
           @click="$store.dispatch('putInteresting', props.row)"
         />
+      </q-td>
+    </template>
+    <template #body-cell-price_mq="props">
+      <q-td>
+        <span :class="price_mqColor(props.row.price_mq)">
+          {{ props.row.price_mq.toFixed(2) }}
+        </span>
       </q-td>
     </template>
   </q-table>
@@ -182,6 +189,23 @@ export default {
   methods: {
     formatCurrency (val) {
       return val !== null ? val.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) : 'N.D.'
+    },
+    price_mqColor (value) {
+      if (value < 500) {
+        return 'text-green-10'
+      }
+      if (value < 1000) {
+        return 'text-green-5'
+      }
+      if (value < 1250) {
+        return 'text-yellow'
+      }
+      if (value < 1500) {
+        return 'text-red'
+      }
+      if (value >= 1500) {
+        return 'text-indigo-10'
+      }
     }
   }
 }
