@@ -215,6 +215,9 @@ export default {
       }
     },
     costsColor (value) {
+      if (value < 0) {
+        return 'text-black'
+      }
       if (value < 25) {
         return 'text-green-10'
       }
