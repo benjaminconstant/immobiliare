@@ -26,7 +26,7 @@
         <q-toggle
           v-model="isHidden"
           color="secondary"
-          :label="isHidden ? 'Visibili' : 'Nascoste'"
+          :label="isHidden ? 'Nascoste' : 'Visibili'"
         />
       </div>
       <div class="row q-pb-lg items-center fit text-secondary q-gutter-md">

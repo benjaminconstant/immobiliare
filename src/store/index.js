@@ -1,6 +1,7 @@
 import { api } from 'boot/axios'
 import Vuex from 'vuex'
 import Vue from 'vue'
+import { Notify } from 'quasar'
 
 Vue.use(Vuex)
 
@@ -47,6 +48,10 @@ const Store = new Vuex.Store({
     putHidden ({ commit }, house) {
       house.is_hidden = !house.is_hidden
       api.put('houses/' + house.id + '/', house)
+      Notify.create({
+        message: (house.is_hidden ? 'Nascosta: ' : 'Ripristinata: ') + house.title,
+        color: house.is_hidden ? 'negative' : 'positive'
+      })
     }
   },
   getters: {
