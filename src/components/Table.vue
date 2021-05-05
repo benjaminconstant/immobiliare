@@ -1,5 +1,6 @@
 <template>
   <q-table
+    ref="table"
     dense
     class="bg-grey-5 q-pa-xl"
     hide-bottom
@@ -20,7 +21,7 @@
           placeholder="Cerca"
         />
         <h4>
-          {{ houses.length }} Annunci
+          {{ houseCounter }} Annunci
         </h4>
         <span>ultimo aggiornamento: {{ lastUpdate }}</span>
         <q-toggle
@@ -219,6 +220,9 @@ export default {
     },
     lastUpdate () {
       return date.formatDate(new Date(Math.max(...this.houses.map(h => new Date(h.updated)))), 'DD/MM/YYYY - HH:mm')
+    },
+    houseCounter () {
+      return this.filter ? this.$refs.table.filteredSortedRowsNumber : this.houses.length
     }
   },
   mounted () {
