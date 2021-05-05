@@ -10,6 +10,13 @@ class ImmobiliareSpider(scrapy.Spider):
     name = "scraper"
     start_urls = ['https://www.immobiliare.it/ricerca.php?idCategoria=1&idContratto=1&idNazione=IT&prezzoMassimo=90000&superficieMinima=60&criterio=prezzo&ordine=asc&noAste=1&pag=1&vrt=45.593861,9.260101;45.565626,9.328594;45.578003,9.394684;45.624123,9.409275;45.659887,9.421978;45.684957,9.384899;45.684837,9.323959;45.680759,9.279671;45.658208,9.24551;45.593861,9.260101']
     page = 0
+    STATE_CHOICES = {
+        'Da ristrutturare': 1,
+        'Buono / Abitabile': 2,
+        'Ottimo / Ristrutturato': 3,
+        'Nuovo / In costruzione': 4,
+        'N.D.': 5
+    }
     House.objects.all().update(has_changed=False)
 
     def parse(self, response):
@@ -52,9 +59,11 @@ class ImmobiliareSpider(scrapy.Spider):
             h['costs'] = -1
 
         try:
-            h['state'] = response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()
+            prova = response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()
+            print(prova)
+            h['state'] = self.STATE_CHOICES[prova]
         except:
-            h['state'] = 'N.D.'
+            h['state'] = 5
 
         obj, created = House.objects.update_or_create(
             id=h['uid'],

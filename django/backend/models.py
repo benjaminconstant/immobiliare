@@ -1,5 +1,13 @@
 from django.db import models
 
+STATE_CHOICES = (
+    (1, 'Da Ristrutturare'),
+    (2, 'Buono / Abitabile'),
+    (3, 'Ottimo / Ristrutturato'),
+    (4, 'Nuovo / In costruzione'),
+    (5, 'N.D.')
+)
+
 
 class House(models.Model):
     id = models.CharField(primary_key=True, max_length=100, null=False)
@@ -8,7 +16,7 @@ class House(models.Model):
     date_publish = models.DateField(null=False)
     title = models.CharField(max_length=1000, null=False)
     link = models.CharField(max_length=1000, null=False)
-    state = models.CharField(max_length=1000, null=False)
+    state = models.IntegerField(choices=STATE_CHOICES)
     text = models.TextField(max_length=5000, null=False)
     price = models.FloatField(null=False)
     price_mq = models.FloatField(null=False)

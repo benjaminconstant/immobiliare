@@ -47,6 +47,9 @@
           <FilterInput field-name="costs_min" field-label="Spese MIN" />
           <FilterInput field-name="costs_max" field-label="Spese MAX" />
         </div>
+        <div class="col q-gutter-md">
+          <FilterSelect field-name="state" field-label="Stato" />
+        </div>
       </div>
     </template>
     <template #body-cell-link="props">
@@ -112,11 +115,12 @@
 
 <script>
 import FilterInput from 'components/FilterInput'
+import FilterSelect from 'components/FilterSelect'
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 export default {
   name: 'Table',
-  components: { FilterInput },
+  components: { FilterInput, FilterSelect },
   data () {
     return {
       isHidden: false,
