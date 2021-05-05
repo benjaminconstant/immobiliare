@@ -102,7 +102,7 @@
       <q-td>
         <q-btn
           :label="isHidden ? 'Ripristina' : 'Nascondi'"
-          color="primary"
+          :color="isHidden ? 'positive' : 'negative'"
           @click="$store.dispatch('putHidden', props.row)"
         />
       </q-td>
