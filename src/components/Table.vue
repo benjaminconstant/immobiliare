@@ -23,6 +23,11 @@
           {{ houses.length }} Annunci
         </h4>
         <span>ultimo aggiornamento: {{ lastUpdate }}</span>
+        <q-toggle
+          v-model="isHidden"
+          color="secondary"
+          :label="isHidden ? 'Visibili' : 'Nascoste'"
+        />
       </div>
       <div class="row q-pb-lg items-center fit text-secondary q-gutter-md">
         <div class="col q-gutter-md">
@@ -92,18 +97,28 @@
         </span>
       </q-td>
     </template>
+    <template #body-cell-is_hidden="props">
+      <q-td>
+        <q-btn
+          :label="isHidden ? 'Ripristina' : 'Nascondi'"
+          color="primary"
+          @click="$store.dispatch('putHidden', props.row)"
+        />
+      </q-td>
+    </template>
   </q-table>
 </template>
 
 <script>
 import FilterInput from 'components/FilterInput'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 export default {
   name: 'Table',
   components: { FilterInput },
   data () {
     return {
+      isHidden: false,
       filter: '',
       pagination: {
         sortBy: 'created',
@@ -181,6 +196,13 @@ export default {
           sortable: true
         },
         {
+          name: 'is_hidden',
+          label: '',
+          align: 'left',
+          field: row => row.is_interesting,
+          sortable: true
+        },
+        {
           name: 'is_interesting',
           label: '',
           align: 'left',
@@ -191,7 +213,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['houses']),
+    ...mapGetters(['housesHidden, housesVisible']),
+    houses () {
+      return this.isHidden ? this.$store.getters.housesHidden : this.$store.getters.housesVisible
+    },
     lastUpdate () {
       return date.formatDate(new Date(Math.max(...this.houses.map(h => new Date(h.updated)))), 'DD/MM/YYYY - HH:mm')
     }

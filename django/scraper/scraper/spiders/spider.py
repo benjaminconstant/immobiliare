@@ -72,7 +72,6 @@ class ImmobiliareSpider(scrapy.Spider):
             print('updated: ' + obj.link)
 
     def closed(self, reason):
-        print('closed')
         not_updated = House.objects.filter(has_changed=False)
         for house in not_updated:
             print('deleting: ' + house.link)

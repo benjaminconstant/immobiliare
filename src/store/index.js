@@ -43,10 +43,14 @@ const Store = new Vuex.Store({
     putInteresting ({ commit }, house) {
       house.is_interesting = !house.is_interesting
       api.put('houses/' + house.id + '/', house)
+    },
+    putHidden ({ commit }, house) {
+      house.is_hidden = !house.is_hidden
+      api.put('houses/' + house.id + '/', house)
     }
   },
   getters: {
-    queryParams: function (state) {
+    queryParams: state => {
       let queryString = ''
       Object.keys(state.filters).forEach(key => {
         if (state.filters[key]) {
@@ -55,6 +59,12 @@ const Store = new Vuex.Store({
       })
       return queryString.replace('&', '?')
       // return Object.keys(state.filters).map(key => key + '=' + state.filters[key]).join('&');
+    },
+    housesVisible: state => {
+      return state.houses.filter(h => !h.is_hidden)
+    },
+    housesHidden: state => {
+      return state.houses.filter(h => h.is_hidden)
     }
   }
 })
