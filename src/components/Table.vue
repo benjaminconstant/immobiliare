@@ -135,14 +135,16 @@ export default {
           name: 'date_publish',
           label: 'Pubblicato',
           align: 'left',
-          field: row => date.formatDate(row.date_publish, 'DD-MM-YYYY'),
+          field: row => row.date_publish,
+          format: val => date.formatDate(val, 'DD-MM-YYYY'),
           sortable: true
         },
         {
           name: 'created',
           label: 'Creato',
           align: 'left',
-          field: row => date.formatDate(row.created, 'DD-MM-YYYY'),
+          field: row => row.created,
+          format: val => date.formatDate(val, 'DD-MM-YYYY'),
           sortable: true
         },
         {
@@ -187,8 +189,7 @@ export default {
           name: 'link',
           label: 'Link',
           align: 'left',
-          field: row => row.link,
-          sortable: true
+          field: row => row.link
         },
         // definita per poter utilizzare ricerca, non visibile
         {
@@ -197,22 +198,19 @@ export default {
           style: 'display: none',
           label: 'Descrizione',
           align: 'left',
-          field: row => row.text,
-          sortable: true
+          field: row => row.text
         },
         {
           name: 'is_hidden',
           label: '',
           align: 'left',
-          field: row => row.is_interesting,
-          sortable: true
+          field: row => row.is_interesting
         },
         {
           name: 'is_interesting',
           label: '',
           align: 'left',
-          field: row => row.is_interesting,
-          sortable: true
+          field: row => row.is_interesting
         }
       ]
     }
