@@ -14,6 +14,7 @@ class House(models.Model):
     mq = models.FloatField(null=False)
     costs = models.IntegerField(null=True, blank=True)
     is_interesting = models.BooleanField(default=False)
+    has_changed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

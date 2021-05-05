@@ -106,7 +106,7 @@ export default {
     return {
       filter: '',
       pagination: {
-        sortBy: 'date_publish',
+        sortBy: 'created',
         descending: true,
         rowsPerPage: 0
       },
@@ -115,7 +115,14 @@ export default {
           name: 'date_publish',
           label: 'Pubblicato',
           align: 'left',
-          field: row => row.date_publish,
+          field: row => date.formatDate(row.date_publish, 'DD-MM-YYYY'),
+          sortable: true
+        },
+        {
+          name: 'created',
+          label: 'Creato',
+          align: 'left',
+          field: row => date.formatDate(row.created, 'DD-MM-YYYY'),
           sortable: true
         },
         {
