@@ -51,6 +51,11 @@ class ImmobiliareSpider(scrapy.Spider):
         except:
             h['costs'] = -1
 
+        try:
+            h['state'] = response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()
+        except:
+            h['state'] = 'N.D.'
+
         obj, created = House.objects.update_or_create(
             id=h['uid'],
             defaults={

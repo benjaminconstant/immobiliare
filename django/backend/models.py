@@ -8,6 +8,7 @@ class House(models.Model):
     date_publish = models.DateField(null=False)
     title = models.CharField(max_length=1000, null=False)
     link = models.CharField(max_length=1000, null=False)
+    state = models.CharField(max_length=1000, null=False)
     text = models.TextField(max_length=5000, null=False)
     price = models.FloatField(null=False)
     price_mq = models.FloatField(null=False)
