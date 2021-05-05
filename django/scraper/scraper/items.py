@@ -10,6 +10,7 @@ class HouseItem(Item):
     uid = Field()
     title = Field()
     link = Field()
+    state = Field()
     price = Field()
     price_mq = Field()
     mq = Field()

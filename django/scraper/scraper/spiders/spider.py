@@ -62,6 +62,7 @@ class ImmobiliareSpider(scrapy.Spider):
                 'title': h['title'],
                 'price': h['price'],
                 'link': h['link'],
+                'state': h['state'],
                 'mq': h['mq'],
                 'text': h['text'],
                 'price_mq': h['price_mq'],
