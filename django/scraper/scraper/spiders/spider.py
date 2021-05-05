@@ -59,9 +59,7 @@ class ImmobiliareSpider(scrapy.Spider):
             h['costs'] = -1
 
         try:
-            prova = response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()
-            print(prova)
-            h['state'] = self.STATE_CHOICES[prova]
+            h['state'] = self.STATE_CHOICES[response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()]
         except:
             h['state'] = 5
 
