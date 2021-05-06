@@ -29,7 +29,7 @@ const Store = new Vuex.Store({
       mq_max: 0,
       costs_min: 0,
       costs_max: 0,
-      state: ''
+      state: null
     }
   },
   mutations: {
