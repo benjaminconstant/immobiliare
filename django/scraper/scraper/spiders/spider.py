@@ -1,5 +1,5 @@
 import scrapy
-from backend.models import House, Search
+from backend.models import House, Search, Image
 from ..items import HouseItem
 import re
 from django.utils import timezone
@@ -91,6 +91,9 @@ class ImmobiliareSpider(scrapy.Spider):
         obj.costs = h['costs']
         obj.date_publish = h['date_publish']
         obj.save()
+
+        for image in response.css('img.nd-ratio__img::attr(src)').extract():
+            i = Image.objects.get_or_create(house=obj, url=image)
 
         print('deep updated: ' + obj.link + ' ' + h['search_name'])
 

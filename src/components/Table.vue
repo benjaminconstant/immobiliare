@@ -121,6 +121,23 @@
         />
       </q-td>
     </template>
+    <template #body-cell-image_set="props">
+      <q-td style="width: 30vw">
+        <div class="row no-wrap fit">
+          <q-img
+            v-for="img in props.row.image_set"
+            :key="img.url"
+            :src="img.url"
+          >
+            <q-tooltip>
+              <div style="width: 30vw" class="row">
+                <q-img class="" :src="img.url" />
+              </div>
+            </q-tooltip>
+          </q-img>
+        </div>
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -165,6 +182,12 @@ export default {
           align: 'left',
           field: row => row.title,
           sortable: true
+        },
+        {
+          name: 'image_set',
+          label: 'Galleria',
+          align: 'left',
+          field: row => row.image_set
         },
         {
           name: 'costs',

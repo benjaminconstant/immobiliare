@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 router = routers.DefaultRouter()
 router.register(r'houses', views.HouseViewSet)
 router.register(r'searches', views.SearchViewSet)
+router.register(r'images', views.ImageViewSet)
 
 
 urlpatterns = [

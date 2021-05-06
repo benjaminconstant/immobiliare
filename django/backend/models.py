@@ -41,3 +41,9 @@ class House(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Image(models.Model):
+    id = models.AutoField(primary_key=True)
+    house = models.ForeignKey(House, on_delete=models.CASCADE)
+    url = models.CharField(max_length=1000, null=True)
