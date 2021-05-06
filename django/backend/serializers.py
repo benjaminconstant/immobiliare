@@ -12,7 +12,7 @@ class SearchSerializer(serializers.HyperlinkedModelSerializer):
 
 class HouseSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    searches = SearchSerializer(many=True)
+    searches = SearchSerializer(many=True, read_only=True)
 
     class Meta:
         model = House
