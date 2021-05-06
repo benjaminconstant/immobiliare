@@ -242,6 +242,7 @@ export default {
   mounted () {
     this.$store.dispatch('getSearches').then(() => {
       this.selectedSearch = this.searchOptions[0]
+      this.updateFilter({ key: 'searches', value: this.selectedSearch.value })
       this.$store.dispatch('getHouses')
     })
     setInterval(() => this.$store.dispatch('getHouses'), 10000)
