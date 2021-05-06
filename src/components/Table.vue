@@ -122,7 +122,7 @@
       </q-td>
     </template>
     <template #body-cell-image_set="props">
-      <q-td style="width: 30vw">
+      <q-td style="width: 20vw">
         <div class="row no-wrap fit">
           <q-img
             v-for="img in props.row.image_set"
