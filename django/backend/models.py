@@ -9,22 +9,35 @@ STATE_CHOICES = (
 )
 
 
-class House(models.Model):
-    id = models.CharField(primary_key=True, max_length=100, null=False)
+class Search(models.Model):
+    id = models.AutoField(primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    date_publish = models.DateField(null=False)
-    title = models.CharField(max_length=1000, null=False)
+    name = models.CharField(max_length=1000, null=False)
     link = models.CharField(max_length=1000, null=False)
-    state = models.IntegerField(choices=STATE_CHOICES)
-    text = models.TextField(max_length=5000, null=False)
-    price = models.FloatField(null=False)
-    price_mq = models.FloatField(null=False)
-    mq = models.FloatField(null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class House(models.Model):
+    id = models.CharField(primary_key=True, max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    date_publish = models.DateField(null=True)
+    title = models.CharField(max_length=1000, null=True)
+    link = models.CharField(max_length=1000, null=True)
+    state = models.IntegerField(choices=STATE_CHOICES, null=True)
+    text = models.TextField(max_length=5000, null=True)
+    price = models.FloatField(null=True)
+    price_mq = models.FloatField(null=True)
+    mq = models.FloatField(null=True)
     costs = models.IntegerField(null=True, blank=True)
     is_interesting = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
     has_changed = models.BooleanField(default=False)
+
+    searches = models.ManyToManyField(Search)
 
     def __str__(self):
         return self.title

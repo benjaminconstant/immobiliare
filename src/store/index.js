@@ -18,7 +18,9 @@ const Store = new Vuex.Store({
   state: {
     pending: false,
     houses: [],
+    searches: [],
     filters: {
+      searches: 1,
       price_min: 0,
       price_max: 0,
       price_mq_min: 0,
@@ -34,6 +36,9 @@ const Store = new Vuex.Store({
     SET_HOUSES (state, data) {
       state.houses = data
     },
+    SET_SEARCHES (state, data) {
+      state.searches = data
+    },
     updateFilter (state, { key, value }) {
       state.filters[key] = value
     }
@@ -41,6 +46,9 @@ const Store = new Vuex.Store({
   actions: {
     getHouses ({ commit, getters }) {
       api.get('houses/' + getters.queryParams).then(r => commit('SET_HOUSES', r.data))
+    },
+    getSearches ({ commit, getters }) {
+      return api.get('searches/').then(r => commit('SET_SEARCHES', r.data))
     },
     putInteresting ({ commit }, house) {
       house.is_interesting = !house.is_interesting

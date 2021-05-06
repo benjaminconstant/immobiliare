@@ -1,5 +1,5 @@
 import scrapy
-from backend.models import House
+from backend.models import House, Search
 from ..items import HouseItem
 import re
 from django.utils import timezone
@@ -8,8 +8,6 @@ from datetime import datetime, timedelta
 
 class ImmobiliareSpider(scrapy.Spider):
     name = "scraper"
-    start_urls = ['https://www.immobiliare.it/ricerca.php?idCategoria=1&idContratto=1&idNazione=IT&prezzoMassimo=90000&superficieMinima=60&criterio=prezzo&ordine=asc&noAste=1&pag=1&vrt=45.593861,9.260101;45.565626,9.328594;45.578003,9.394684;45.624123,9.409275;45.659887,9.421978;45.684957,9.384899;45.684837,9.323959;45.680759,9.279671;45.658208,9.24551;45.593861,9.260101']
-    page = 0
     STATE_CHOICES = {
         'Da ristrutturare': 1,
         'Buono / Abitabile': 2,
@@ -18,16 +16,24 @@ class ImmobiliareSpider(scrapy.Spider):
         'N.D.': 5
     }
     House.objects.all().update(has_changed=False)
+    for house in House.objects.all():
+        house.searches.clear()
 
-    def parse(self, response):
+    def start_requests(self):
+        for search in Search.objects.all():
+            page = 0
+            yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page))
+
+    def parse(self, response, search, page):
 
         house_counter = response.css('span.visible-xs-inline::text').get()
         house_container = response.css('li.listing-item.js-row-detail')
-        self.page += 1
-        print('pag: ' + str(self.page) + ' ' + '(' + str(len(house_container)) + ' annunci)')
+        page += 1
+        print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(house_container)) + ' annunci)')
 
         for house in house_container:
             h = HouseItem()
+            h['search_name'] = search.name
             h['uid'] = house.css('::attr(data-id)').get()
             try:
                 h['price'] = float(house.css('li.lif__item.lif__pricing::text').get().strip().split('€ ')[1].replace('.', ''))
@@ -37,11 +43,27 @@ class ImmobiliareSpider(scrapy.Spider):
             h['link'] = house.css('p.titolo.text-primary > a::attr(href)').get()
             h['mq'] = float(house.xpath('.//div[text()[contains(., "superficie")]]/preceding-sibling::div/span/node()').get())
             h['price_mq'] = round(h['price']/h['mq'], 2)
+
+            obj, created = House.objects.get_or_create(id=h['uid'])
+            obj.title = h['title']
+            obj.price = h['price']
+            obj.link = h['link']
+            obj.mq = h['mq']
+            obj.price_mq = h['price_mq']
+            obj.has_changed = True
+            obj.searches.add(search.id)
+            obj.save()
+
+            if created:
+                print('created: ' + obj.link + ' ' + h['search_name'])
+            else:
+                print('updated: ' + obj.link + ' ' + h['search_name'])
+
             yield scrapy.Request(h['link'], self.parse_house, cb_kwargs=dict(h=h))
 
         next_page = response.css('a[title="Pagina successiva"]::attr(href)').get()
         if next_page is not None:
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
     def parse_house(self, response, h):
         h['text'] = ''.join(response.css('div.im-description__text.js-readAllText::text').extract()).strip()
@@ -63,26 +85,14 @@ class ImmobiliareSpider(scrapy.Spider):
         except:
             h['state'] = self.STATE_CHOICES['N.D.']
 
-        obj, created = House.objects.update_or_create(
-            id=h['uid'],
-            defaults={
-                'title': h['title'],
-                'price': h['price'],
-                'link': h['link'],
-                'state': h['state'],
-                'mq': h['mq'],
-                'text': h['text'],
-                'price_mq': h['price_mq'],
-                'costs': h['costs'],
-                'date_publish': h['date_publish'],
-                'has_changed': True
-            }
-        )
+        obj = House.objects.get(id=h['uid'])
+        obj.state = h['state']
+        obj.text = h['text']
+        obj.costs = h['costs']
+        obj.date_publish = h['date_publish']
+        obj.save()
 
-        if created:
-            print('created: ' + obj.link)
-        else:
-            print('updated: ' + obj.link)
+        print('deep updated: ' + obj.link + ' ' + h['search_name'])
 
     def closed(self, reason):
         not_updated = House.objects.filter(has_changed=False)

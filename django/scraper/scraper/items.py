@@ -8,6 +8,7 @@ from scrapy import Item, Field
 
 class HouseItem(Item):
     uid = Field()
+    search_name = Field()
     title = Field()
     link = Field()
     state = Field()

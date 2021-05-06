@@ -14,6 +14,14 @@
   >
     <template #top>
       <div class="row justify-around fit items-center text-secondary">
+        <q-select
+          v-model="selectedSearch"
+          filled
+          color="secondary"
+          label="Ricerca"
+          :options="searchOptions"
+          @input="onSearchChange($event)"
+        />
         <q-input
           v-model="filter"
           clearable
@@ -116,13 +124,14 @@
 <script>
 import FilterInput from 'components/FilterInput'
 import FilterSelect from 'components/FilterSelect'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { date } from 'quasar'
 export default {
   name: 'Table',
   components: { FilterInput, FilterSelect },
   data () {
     return {
+      selectedSearch: '',
       isHidden: false,
       filter: '',
       pagination: {
@@ -217,6 +226,9 @@ export default {
   },
   computed: {
     ...mapGetters(['housesHidden, housesVisible']),
+    searchOptions () {
+      return this.$store.state.searches.map(search => ({ label: search.name, value: search.id }))
+    },
     houses () {
       return this.isHidden ? this.$store.getters.housesHidden : this.$store.getters.housesVisible
     },
@@ -228,10 +240,18 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getHouses')
+    this.$store.dispatch('getSearches').then(() => {
+      this.selectedSearch = this.searchOptions[0]
+      this.$store.dispatch('getHouses')
+    })
     setInterval(() => this.$store.dispatch('getHouses'), 10000)
   },
   methods: {
+    ...mapMutations(['updateFilter']),
+    onSearchChange (value) {
+      this.updateFilter({ key: 'searches', value: value.value })
+      this.$store.dispatch('getHouses')
+    },
     formatCurrency (val) {
       return val !== null ? val.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) : 'N.D.'
     },
