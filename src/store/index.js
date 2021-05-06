@@ -39,13 +39,20 @@ const Store = new Vuex.Store({
     SET_SEARCHES (state, data) {
       state.searches = data
     },
+    SET_PENDING (state, data) {
+      state.pending = data
+    },
     updateFilter (state, { key, value }) {
       state.filters[key] = value
     }
   },
   actions: {
     getHouses ({ commit, getters }) {
-      api.get('houses/' + getters.queryParams).then(r => commit('SET_HOUSES', r.data))
+      commit('SET_PENDING', true)
+      api.get('houses/' + getters.queryParams).then(r => {
+        commit('SET_HOUSES', r.data)
+        commit('SET_PENDING', false)
+      })
     },
     getSearches ({ commit, getters }) {
       return api.get('searches/').then(r => commit('SET_SEARCHES', r.data))

@@ -6,8 +6,11 @@
     hide-bottom
     wrap-cells
     :pagination="pagination"
+    :loading="pending"
+    separator="cell"
     binary-state-sort
     :data="houses"
+    color="secondary"
     :columns="columns"
     row-key="id"
     :filter="filter"
@@ -124,7 +127,7 @@
 <script>
 import FilterInput from 'components/FilterInput'
 import FilterSelect from 'components/FilterSelect'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { date } from 'quasar'
 export default {
   name: 'Table',
@@ -226,6 +229,7 @@ export default {
   },
   computed: {
     ...mapGetters(['housesHidden, housesVisible']),
+    ...mapState(['pending']),
     searchOptions () {
       return this.$store.state.searches.map(search => ({ label: search.name, value: search.id }))
     },
