@@ -275,7 +275,7 @@ export default {
       this.updateFilter({ key: 'search', value: this.selectedSearch.value })
       this.$store.dispatch('getHouses')
     })
-    setInterval(() => this.$store.dispatch('getHouses'), 10000)
+    setInterval(() => this.$store.dispatch('getHouses'), 60000)
   },
   methods: {
     ...mapMutations(['updateFilter']),
