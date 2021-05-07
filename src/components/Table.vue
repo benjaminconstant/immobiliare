@@ -28,6 +28,7 @@
         <q-input
           v-model="filter"
           clearable
+          debounce="500"
           color="secondary"
           placeholder="Cerca"
         />
