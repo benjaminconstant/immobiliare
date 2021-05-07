@@ -37,9 +37,9 @@
         </h4>
         <span>ultimo aggiornamento: {{ lastUpdate }}</span>
         <q-toggle
-          v-model="isHidden"
+          v-model="isVisible"
           color="secondary"
-          :label="isHidden ? 'Nascoste' : 'Visibili'"
+          :label="isVisible ? 'Nascoste' : 'Visibili'"
         />
       </div>
       <div class="row q-pb-lg items-center fit text-secondary q-gutter-md">
@@ -116,8 +116,8 @@
     <template #body-cell-is_hidden="props">
       <q-td>
         <q-btn
-          :label="isHidden ? 'Ripristina' : 'Nascondi'"
-          :color="isHidden ? 'positive' : 'negative'"
+          :label="isVisible ? 'Ripristina' : 'Nascondi'"
+          :color="isVisible ? 'positive' : 'negative'"
           @click="$store.dispatch('putHidden', props.row)"
         />
       </q-td>
@@ -166,7 +166,7 @@ export default {
   data () {
     return {
       selectedSearch: '',
-      isHidden: false,
+      isVisible: true,
       filter: '',
       pagination: {
         sortBy: 'created',
@@ -278,7 +278,7 @@ export default {
       return this.$store.state.searches.map(search => ({ label: search.name, value: search.id }))
     },
     houses () {
-      return this.isHidden ? this.$store.getters.housesHidden : this.$store.getters.housesVisible
+      return this.isVisible ? this.$store.getters.housesVisible : this.$store.getters.housesHidden
     },
     lastUpdate () {
       return date.formatDate(new Date(Math.max(...this.houses.map(h => new Date(h.updated)))), 'DD/MM/YYYY - HH:mm')
