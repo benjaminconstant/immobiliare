@@ -21,7 +21,8 @@ class Search(models.Model):
 
 
 class House(models.Model):
-    id = models.CharField(primary_key=True, max_length=100)
+    id = models.AutoField(primary_key=True)
+    uid = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     date_publish = models.DateField(null=True)
@@ -37,7 +38,7 @@ class House(models.Model):
     is_hidden = models.BooleanField(default=False)
     has_changed = models.BooleanField(default=False)
 
-    searches = models.ManyToManyField(Search)
+    search = models.ForeignKey(Search, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

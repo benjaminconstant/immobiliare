@@ -7,7 +7,7 @@ class HouseAdmin(admin.ModelAdmin):
     ordering = ['price']
     search_fields = ['title', 'text', 'id', 'link']
     list_display = ['date_publish', 'title', 'mq', 'price', 'price_mq', 'costs']
-    list_filter = ('searches',)
+    list_filter = ('search',)
     readonly_fields = ['created', 'updated']
 
 

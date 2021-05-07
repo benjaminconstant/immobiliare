@@ -18,8 +18,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class HouseSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    searches = SearchSerializer(many=True, read_only=True)
+    uid = serializers.ReadOnlyField()
+    searche = SearchSerializer(read_only=True)
     image_set = ImageSerializer(many=True, read_only=True)
 
     class Meta:

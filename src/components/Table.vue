@@ -269,7 +269,7 @@ export default {
   mounted () {
     this.$store.dispatch('getSearches').then(() => {
       this.selectedSearch = this.searchOptions[0]
-      this.updateFilter({ key: 'searches', value: this.selectedSearch.value })
+      this.updateFilter({ key: 'search', value: this.selectedSearch.value })
       this.$store.dispatch('getHouses')
     })
     setInterval(() => this.$store.dispatch('getHouses'), 10000)
@@ -277,7 +277,7 @@ export default {
   methods: {
     ...mapMutations(['updateFilter']),
     onSearchChange (value) {
-      this.updateFilter({ key: 'searches', value: value.value })
+      this.updateFilter({ key: 'search', value: value.value })
       this.$store.dispatch('getHouses')
     },
     formatCurrency (val) {

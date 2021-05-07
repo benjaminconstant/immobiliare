@@ -20,7 +20,7 @@ const Store = new Vuex.Store({
     houses: [],
     searches: [],
     filters: {
-      searches: null,
+      search: null,
       price_min: 0,
       price_max: 0,
       price_mq_min: 0,

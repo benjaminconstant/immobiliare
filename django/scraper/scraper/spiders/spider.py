@@ -16,8 +16,6 @@ class ImmobiliareSpider(scrapy.Spider):
         'N.D.': 5
     }
     House.objects.all().update(has_changed=False)
-    for house in House.objects.all():
-        house.searches.clear()
 
     def start_requests(self):
         for search in Search.objects.all():
@@ -33,7 +31,7 @@ class ImmobiliareSpider(scrapy.Spider):
 
         for house in house_container:
             h = HouseItem()
-            h['search_name'] = search.name
+            h['search'] = search
             h['uid'] = house.css('::attr(data-id)').get()
             try:
                 h['price'] = float(house.css('li.lif__item.lif__pricing::text').get().strip().split('€ ')[1].replace('.', ''))
@@ -44,20 +42,19 @@ class ImmobiliareSpider(scrapy.Spider):
             h['mq'] = int(house.xpath('.//div[text()[contains(., "superficie")]]/preceding-sibling::div/span/node()').get().replace('.', ''))
             h['price_mq'] = round(h['price']/h['mq'], 2)
 
-            obj, created = House.objects.get_or_create(id=h['uid'])
+            obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
             obj.title = h['title']
             obj.price = h['price']
             obj.link = h['link']
             obj.mq = h['mq']
             obj.price_mq = h['price_mq']
             obj.has_changed = True
-            obj.searches.add(search.id)
             obj.save()
 
             if created:
-                print('created: ' + obj.link + ' ' + h['search_name'])
+                print('created: ' + obj.link + ' ' + h['search'].name)
             else:
-                print('updated: ' + obj.link + ' ' + h['search_name'])
+                print('updated: ' + obj.link + ' ' + h['search'].name)
 
             yield scrapy.Request(h['link'], self.parse_house, cb_kwargs=dict(h=h))
 
@@ -85,17 +82,18 @@ class ImmobiliareSpider(scrapy.Spider):
         except:
             h['state'] = self.STATE_CHOICES['N.D.']
 
-        obj = House.objects.get(id=h['uid'])
-        obj.state = h['state']
-        obj.text = h['text']
-        obj.costs = h['costs']
-        obj.date_publish = h['date_publish']
-        obj.save()
+        obj_list = House.objects.filter(uid=h['uid'])
+        for obj in obj_list:
+            obj.state = h['state']
+            obj.text = h['text']
+            obj.costs = h['costs']
+            obj.date_publish = h['date_publish']
+            obj.save()
 
-        for image in response.css('img.nd-ratio__img::attr(src)').extract():
-            i = Image.objects.get_or_create(house=obj, url=image)
+            for image in response.css('img.nd-ratio__img::attr(src)').extract():
+                i = Image.objects.get_or_create(house=obj, url=image)
 
-        print('deep updated: ' + obj.link + ' ' + h['search_name'])
+            print('deep updated: ' + obj.link)
 
     def closed(self, reason):
         not_updated = House.objects.filter(has_changed=False)
