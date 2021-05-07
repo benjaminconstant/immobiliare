@@ -141,6 +141,17 @@
         </div>
       </q-td>
     </template>
+    <template #body-cell-note="props">
+      <q-td>
+        <q-input
+          autogrow
+          :value="props.row.note"
+          type="textarea"
+          debounce="500"
+          @input="onNoteChange(props.row, $event)"
+        />
+      </q-td>
+    </template>
   </q-table>
 </template>
 
@@ -249,6 +260,12 @@ export default {
           label: '',
           align: 'left',
           field: row => row.is_interesting
+        },
+        {
+          name: 'note',
+          label: 'Note',
+          align: 'left',
+          field: row => row.note
         }
       ]
     }
@@ -282,6 +299,10 @@ export default {
     onSearchChange (value) {
       this.updateFilter({ key: 'search', value: value.value })
       this.$store.dispatch('getHouses')
+    },
+    onNoteChange (house, note) {
+      house.note = note
+      this.$store.dispatch('putNote', house)
     },
     formatCurrency (val) {
       return val !== null ? val.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' }) : 'N.D.'

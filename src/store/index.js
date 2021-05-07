@@ -61,6 +61,9 @@ const Store = new Vuex.Store({
       house.is_interesting = !house.is_interesting
       api.put('houses/' + house.id + '/', house)
     },
+    putNote ({ commit }, house) {
+      api.put('houses/' + house.id + '/', house)
+    },
     putHidden ({ commit }, house) {
       house.is_hidden = !house.is_hidden
       api.put('houses/' + house.id + '/', house)
