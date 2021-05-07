@@ -129,7 +129,6 @@
             :key="img.url"
             once
             transition="scale"
-            margin="-100px"
             class="col q-mx-xs"
           >
             <q-img :src="img.url">
