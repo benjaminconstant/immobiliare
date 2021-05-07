@@ -37,7 +37,7 @@ class House(models.Model):
     is_interesting = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
     has_changed = models.BooleanField(default=False)
-    note = models.TextField(max_length=5000, null=True)
+    note = models.TextField(max_length=5000, null=True, blank=True)
 
     search = models.ForeignKey(Search, on_delete=models.CASCADE)
 
