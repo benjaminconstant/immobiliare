@@ -124,17 +124,20 @@
     <template #body-cell-image_set="props">
       <q-td style="width: 20vw">
         <div class="row no-wrap fit">
-          <q-img
+          <q-intersection
             v-for="img in props.row.image_set"
             :key="img.url"
-            :src="img.url"
+            once
+            transition="scale"
+            margin="-100px"
+            class="col q-mx-xs"
           >
-            <q-tooltip>
-              <div style="width: 30vw" class="row">
-                <q-img class="" :src="img.url" />
-              </div>
-            </q-tooltip>
-          </q-img>
+            <q-img :src="img.url">
+              <q-tooltip>
+                <q-img style="width: 30vw" :src="img.url" />
+              </q-tooltip>
+            </q-img>
+          </q-intersection>
         </div>
       </q-td>
     </template>
