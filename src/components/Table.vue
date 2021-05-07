@@ -259,7 +259,8 @@ export default {
           name: 'is_interesting',
           label: '',
           align: 'left',
-          field: row => row.is_interesting
+          field: row => row.is_interesting,
+          sortable: true
         },
         {
           name: 'note',
