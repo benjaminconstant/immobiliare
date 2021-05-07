@@ -123,7 +123,7 @@
     </template>
     <template #body-cell-image_set="props">
       <q-td style="width: 20vw">
-        <div class="row no-wrap fit">
+        <div class="row">
           <q-intersection
             v-for="img in props.row.image_set"
             :key="img.url"
