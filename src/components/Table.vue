@@ -79,7 +79,7 @@
     </template>
     <template #body-cell-created="props">
       <q-td>
-        <span :class="date.isSameDate(props.row.created, new Date(), day) ? 'text-warning' : ''">{{ date.formatDate(props.row.created, 'DD-MM-YYYY') }}</span>
+        <span :class="date.isSameDate(props.row.created, new Date(), 'day') ? 'text-warning' : ''">{{ date.formatDate(props.row.created, 'DD-MM-YYYY') }}</span>
       </q-td>
     </template>
     <template #body-cell-title="props">
