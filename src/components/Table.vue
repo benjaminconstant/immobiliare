@@ -77,6 +77,11 @@
         />
       </q-td>
     </template>
+    <template #body-cell-created="props">
+      <q-td>
+        <span :class="date.isSameDate(props.row.created, new Date(), day) ? 'text-warning' : ''">{{ date.formatDate(props.row.created, 'DD-MM-YYYY') }}</span>
+      </q-td>
+    </template>
     <template #body-cell-title="props">
       <q-td style="max-width: 400px">
         {{ props.row.title }}
@@ -164,6 +169,7 @@ export default {
   components: { FilterInput, FilterSelect },
   data () {
     return {
+      date,
       selectedSearch: '',
       isHidden: false,
       filter: '',
@@ -187,7 +193,6 @@ export default {
           label: 'Creato',
           align: 'left',
           field: row => row.created,
-          format: val => date.formatDate(val, 'DD-MM-YYYY'),
           sortable: true,
           style: 'min-width: 110px'
         },
