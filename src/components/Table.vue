@@ -65,7 +65,7 @@
       </div>
     </template>
     <template #body-cell-link="props">
-      <q-td>
+      <q-td class="text-center">
         <q-btn
           class="text-bold text-white"
           no-caps
@@ -78,12 +78,12 @@
       </q-td>
     </template>
     <template #body-cell-created="props">
-      <q-td>
+      <q-td class="text-center">
         <span :class="date.isSameDate(props.row.created, new Date(), 'day') ? 'text-warning' : ''">{{ date.formatDate(props.row.created, 'DD-MM-YYYY') }}</span>
       </q-td>
     </template>
     <template #body-cell-title="props">
-      <q-td style="max-width: 400px">
+      <q-td class="text-center" style="max-width: 400px">
         {{ props.row.title }}
         <q-tooltip
           content-class="bg-dark"
@@ -95,7 +95,7 @@
       </q-td>
     </template>
     <template #body-cell-is_interesting="props">
-      <q-td>
+      <q-td class="text-center">
         <div>
           <q-icon
             size="lg"
@@ -113,21 +113,21 @@
       </q-td>
     </template>
     <template #body-cell-price_mq="props">
-      <q-td>
+      <q-td class="text-center">
         <span :class="price_mqColor(props.row.price_mq)">
           {{ props.row.price_mq.toFixed(2) }}
         </span>
       </q-td>
     </template>
     <template #body-cell-costs="props">
-      <q-td>
+      <q-td class="text-center">
         <span :class="costsColor(props.row.costs)">
           {{ formatCurrency(props.row.costs) }}
         </span>
       </q-td>
     </template>
     <template #body-cell-image_set="props">
-      <q-td>
+      <q-td class="text-center">
         <div style="width: 20vw" class="row">
           <q-intersection
             v-for="img in props.row.image_set"
@@ -146,7 +146,7 @@
       </q-td>
     </template>
     <template #body-cell-note="props">
-      <q-td>
+      <q-td class="text-center">
         <q-input
           autogrow
           :value="props.row.note"
