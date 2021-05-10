@@ -91,12 +91,20 @@
     </template>
     <template #body-cell-is_interesting="props">
       <q-td>
-        <q-icon
-          :color="props.row.is_interesting ? 'warning' : 'grey'"
-          name="star"
-          size="lg"
-          @click="$store.dispatch('putInteresting', props.row)"
-        />
+        <div>
+          <q-icon
+            size="lg"
+            :color="props.row.is_interesting ? 'warning' : 'grey'"
+            name="star"
+            @click="$store.dispatch('putInteresting', props.row)"
+          />
+          <q-icon
+            size="lg"
+            :color="props.row.is_hidden ? 'positive' : 'negative'"
+            :name="props.row.is_hidden ? 'restore' : 'delete'"
+            @click="$store.dispatch('putHidden', props.row)"
+          />
+        </div>
       </q-td>
     </template>
     <template #body-cell-price_mq="props">
@@ -113,18 +121,9 @@
         </span>
       </q-td>
     </template>
-    <template #body-cell-is_hidden="props">
-      <q-td>
-        <q-btn
-          :label="isHidden ? 'Ripristina' : 'Nascondi'"
-          :color="isHidden ? 'positive' : 'negative'"
-          @click="$store.dispatch('putHidden', props.row)"
-        />
-      </q-td>
-    </template>
     <template #body-cell-image_set="props">
       <q-td>
-        <div style="width: 300px" class="row">
+        <div style="width: 20vw" class="row">
           <q-intersection
             v-for="img in props.row.image_set"
             :key="img.url"
@@ -176,11 +175,12 @@ export default {
       columns: [
         {
           name: 'date_publish',
-          label: 'Pubblicato',
+          label: 'Data',
           align: 'left',
           field: row => row.date_publish,
           format: val => date.formatDate(val, 'DD-MM-YYYY'),
-          sortable: true
+          sortable: true,
+          style: 'min-width: 110px'
         },
         {
           name: 'created',
@@ -188,7 +188,8 @@ export default {
           align: 'left',
           field: row => row.created,
           format: val => date.formatDate(val, 'DD-MM-YYYY'),
-          sortable: true
+          sortable: true,
+          style: 'min-width: 110px'
         },
         {
           name: 'title',
@@ -248,12 +249,6 @@ export default {
           label: 'Descrizione',
           align: 'left',
           field: row => row.text
-        },
-        {
-          name: 'is_hidden',
-          label: '',
-          align: 'left',
-          field: row => row.is_interesting
         },
         {
           name: 'is_interesting',
@@ -350,9 +345,9 @@ export default {
 </script>
 <style>
 td {
-  font-size: 18px !important;
+  font-size: 16px !important;
 }
 th {
-  font-size: 24px !important;
+  font-size: 22px !important;
 }
 </style>
