@@ -55,11 +55,11 @@
           <FilterInput field-name="mq_min" field-label="MQ MIN" />
           <FilterInput field-name="mq_max" field-label="MQ MAX" />
         </div>
-        <div v-if="selectedSearch.value !=2" class="col q-gutter-md">
+        <div v-if="selectedSearch.platform !=2" class="col q-gutter-md">
           <FilterInput field-name="costs_min" field-label="Spese MIN" />
           <FilterInput field-name="costs_max" field-label="Spese MAX" />
         </div>
-        <div v-if="selectedSearch.value !=2" class="col q-gutter-md">
+        <div v-if="selectedSearch.platform !=2" class="col q-gutter-md">
           <FilterSelect field-name="state" field-label="Stato" />
         </div>
       </div>
@@ -275,7 +275,7 @@ export default {
     ...mapGetters(['housesHidden, housesVisible']),
     ...mapState(['pending']),
     searchOptions () {
-      return this.$store.state.searches.map(search => ({ label: search.name, value: search.id }))
+      return this.$store.state.searches.map(search => ({ label: search.name, value: search, platform: search.platform }))
     },
     houses () {
       return this.isHidden ? this.$store.getters.housesHidden : this.$store.getters.housesVisible
