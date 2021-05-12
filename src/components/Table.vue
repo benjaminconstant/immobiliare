@@ -59,7 +59,7 @@
           <FilterInput field-name="costs_min" field-label="Spese MIN" />
           <FilterInput field-name="costs_max" field-label="Spese MAX" />
         </div>
-        <div class="col q-gutter-md">
+        <div v-if="selectedSearch.value !=2" class="col q-gutter-md">
           <FilterSelect field-name="state" field-label="Stato" />
         </div>
       </div>
