@@ -275,7 +275,7 @@ export default {
     ...mapGetters(['housesHidden, housesVisible']),
     ...mapState(['pending']),
     searchOptions () {
-      return this.$store.state.searches.map(search => ({ label: search.name, value: search, platform: search.platform }))
+      return this.$store.state.searches.map(search => ({ label: search.name, value: search.value, platform: search.platform }))
     },
     houses () {
       return this.isHidden ? this.$store.getters.housesHidden : this.$store.getters.housesVisible
