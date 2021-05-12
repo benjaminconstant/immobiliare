@@ -52,10 +52,7 @@ class ImmobiliareSpider(scrapy.Spider):
             obj.has_changed = True
             obj.save()
 
-            if created:
-                print('created: ' + obj.link + ' ' + h['search'].name)
-            else:
-                print('updated: ' + obj.link + ' ' + h['search'].name)
+            print(('created: ' if created else 'updated: ') + obj.link + ' ' + h['search'].name)
 
             yield scrapy.Request(h['link'], self.parse_detail, cb_kwargs=dict(h=h))
 
@@ -150,17 +147,18 @@ class CasaDaPrivatoSpider(scrapy.Spider):
 
         h['text'] = response.css('div.section-data > div.col-sm-12.section-margin.text-justify::text').get().strip()
 
-        obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
-        obj.title = h['title']
-        obj.link = h['link']
-        obj.price = h['price']
-        obj.mq = h['mq']
-        obj.price_mq = h['price_mq']
-        obj.date_publish = h['date_publish']
-        obj.text = h['text']
-        obj.has_changed = True
-        obj.save()
-        print('deep updated: ' + obj.link)
+        if h['price'] <= 100000:
+            obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
+            obj.title = h['title']
+            obj.link = h['link']
+            obj.price = h['price']
+            obj.mq = h['mq']
+            obj.price_mq = h['price_mq']
+            obj.date_publish = h['date_publish']
+            obj.text = h['text']
+            obj.has_changed = True
+            obj.save()
+            print(('created: ' if created else 'updated: ') + obj.link + ' ' + h['search'].name)
 
-        for image in response.css('div.item > img::attr(src)').getall()[:3]:
-            i = Image.objects.get_or_create(house=obj, url=image)
+            for image in response.css('div.item > img::attr(src)').getall()[:3]:
+                i = Image.objects.get_or_create(house=obj, url=image)
