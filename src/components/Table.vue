@@ -55,7 +55,7 @@
           <FilterInput field-name="mq_min" field-label="MQ MIN" />
           <FilterInput field-name="mq_max" field-label="MQ MAX" />
         </div>
-        <div class="col q-gutter-md">
+        <div v-if="selectedSearch.value !=2" class="col q-gutter-md">
           <FilterInput field-name="costs_min" field-label="Spese MIN" />
           <FilterInput field-name="costs_max" field-label="Spese MAX" />
         </div>
