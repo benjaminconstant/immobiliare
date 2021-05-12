@@ -8,13 +8,19 @@ STATE_CHOICES = (
     (5, 'N.D.')
 )
 
+PLATFORM_CHOICES = (
+    (1, 'Immobiliare'),
+    (2, 'Casa Da Privato')
+)
+
 
 class Search(models.Model):
     id = models.AutoField(primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=1000, null=False)
-    link = models.CharField(max_length=1000, null=False)
+    link = models.CharField(max_length=1000, null=True, blank=True)
+    platform = models.IntegerField(null=False, choices=PLATFORM_CHOICES)
 
     def __str__(self):
         return self.name
