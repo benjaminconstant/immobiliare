@@ -158,7 +158,7 @@ class CasaDaPrivatoSpider(scrapy.Spider):
             obj.text = h['text']
             obj.has_changed = True
             obj.save()
-            print(('created: ' if created else 'updated: ') + obj.link + ' ' + h['search'].name)
+            print(('created: ' if created else 'updated: ') + obj.link + ' ' + search.name)
 
             for image in response.css('div.item > img::attr(src)').getall()[:3]:
                 i = Image.objects.get_or_create(house=obj, url=image)
