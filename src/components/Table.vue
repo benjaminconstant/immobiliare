@@ -287,6 +287,15 @@ export default {
       return this.filter ? this.$refs.table.filteredSortedRowsNumber : this.houses.length
     }
   },
+  watch: {
+    selectedSearch: function (val) {
+      if (val === 2) {
+        this.updateFilter({ key: 'state', value: null })
+        this.updateFilter({ key: 'costs_min', value: null })
+        this.updateFilter({ key: 'costs_max', value: null })
+      }
+    }
+  },
   mounted () {
     this.$store.dispatch('getSearches').then(() => {
       this.selectedSearch = this.searchOptions[0]
@@ -295,6 +304,7 @@ export default {
     })
     setInterval(() => this.$store.dispatch('getHouses'), 600000)
   },
+
   methods: {
     ...mapMutations(['updateFilter']),
     onSearchChange (value) {
