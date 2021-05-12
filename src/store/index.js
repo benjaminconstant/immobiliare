@@ -21,14 +21,14 @@ const Store = new Vuex.Store({
     searches: [],
     filters: {
       search: null,
-      price_min: 0,
-      price_max: 0,
-      price_mq_min: 0,
-      price_mq_max: 0,
-      mq_min: 0,
-      mq_max: 0,
-      costs_min: 0,
-      costs_max: 0,
+      price_min: null,
+      price_max: null,
+      price_mq_min: null,
+      price_mq_max: null,
+      mq_min: null,
+      mq_max: null,
+      costs_min: null,
+      costs_max: null,
       state: null
     }
   },
