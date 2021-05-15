@@ -126,7 +126,7 @@
         </span>
       </q-td>
     </template>
-    <template #body-cell-image_set="props">
+    <template #body-cell-is_private="props">
       <q-td class="text-center" :class="props.row.is_private && 'bg-positive'">
         <div style="width: 20vw" class="row">
           <q-intersection
@@ -204,10 +204,11 @@ export default {
           sortable: true
         },
         {
-          name: 'image_set',
+          name: 'is_private',
           label: 'Galleria',
           align: 'left',
-          field: row => row.image_set
+          field: row => row.is_private,
+          sortable: true
         },
         {
           name: 'costs',
