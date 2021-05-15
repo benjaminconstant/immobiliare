@@ -127,7 +127,7 @@
       </q-td>
     </template>
     <template #body-cell-image_set="props">
-      <q-td class="text-center">
+      <q-td class="text-center" :class="props.row.is_private && 'bg-positive'">
         <div style="width: 20vw" class="row">
           <q-intersection
             v-for="img in props.row.image_set"

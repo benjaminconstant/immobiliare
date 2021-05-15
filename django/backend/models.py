@@ -42,6 +42,7 @@ class House(models.Model):
     costs = models.IntegerField(null=True, blank=True)
     is_interesting = models.BooleanField(default=False)
     is_hidden = models.BooleanField(default=False)
+    is_private = models.BooleanField(null=True)
     has_changed = models.BooleanField(default=False)
     note = models.TextField(max_length=5000, null=True, blank=True)
 

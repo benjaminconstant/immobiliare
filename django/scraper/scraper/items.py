@@ -15,6 +15,7 @@ class HouseItem(Item):
     price = Field()
     price_mq = Field()
     mq = Field()
+    is_private = Field()
     text = Field()
     costs = Field()
     date_publish = Field()

@@ -80,12 +80,15 @@ class ImmobiliareSpider(scrapy.Spider):
         except:
             h['state'] = self.STATE_CHOICES['N.D.']
 
+        h['is_private'] = response.css('div.im-lead__supervisor > div > p::text').get() == 'Privato'
+
         obj_list = House.objects.filter(uid=h['uid'])
         for obj in obj_list:
             obj.state = h['state']
             obj.text = h['text']
             obj.costs = h['costs']
             obj.date_publish = h['date_publish']
+            obj.is_private = h['is_private']
             obj.save()
 
             for image in response.css('img.nd-ratio__img::attr(src)').getall():
