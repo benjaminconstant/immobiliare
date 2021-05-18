@@ -193,6 +193,7 @@ export default {
           label: 'Creato',
           align: 'left',
           field: row => row.created,
+          format: val => date.formatDate(val, 'DD-MM-YYYY'),
           sortable: true,
           style: 'min-width: 110px'
         },
