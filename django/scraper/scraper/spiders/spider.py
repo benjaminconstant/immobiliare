@@ -91,7 +91,7 @@ class ImmobiliareSpider(scrapy.Spider):
             obj.is_private = h['is_private']
             obj.save()
 
-            for image in response.css('img.nd-ratio__img::attr(src)').getall():
+            for image in response.css('img.nd-ratio__img::attr(src)').getall()[:3]:
                 i = Image.objects.get_or_create(house=obj, url=image)
 
             print('deep updated: ' + obj.link)
