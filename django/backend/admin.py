@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import House, Search
+from .models import House, Search, Image
 
 
 @admin.register(House)
@@ -18,3 +18,10 @@ class SearchAdmin(admin.ModelAdmin):
     list_display = ['name', 'link']
 
     readonly_fields = ['created', 'updated']
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    ordering = ['url']
+    search_fields = ['house', 'url']
+    list_display = ['house', 'url']
