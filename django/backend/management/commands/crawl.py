@@ -11,7 +11,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '-p',
-            action='store',
             default='all',
             help='platform to scrape',
             type=str
