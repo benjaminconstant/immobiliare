@@ -40,7 +40,10 @@ class ImmobiliareSpider(scrapy.Spider):
                 h['price'] = float(house.css('li.lif__item.lif__pricing > div::text').get().strip().split('€ ')[1].replace('.', ''))
             h['title'] = house.css('p.titolo.text-primary > a::text').get().strip()
             h['link'] = house.css('p.titolo.text-primary > a::attr(href)').get()
-            h['mq'] = int(house.xpath('.//div[text()[contains(., "superficie")]]/preceding-sibling::div/span/node()').get().replace('.', ''))
+            try:
+                h['mq'] = int(house.xpath('.//div[text()[contains(., "superficie")]]/preceding-sibling::div/span/node()').get().replace('.', ''))
+            except:
+                h['mq'] = None
             h['price_mq'] = round(h['price']/h['mq'], 2)
 
             obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
