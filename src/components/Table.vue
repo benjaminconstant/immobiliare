@@ -35,6 +35,12 @@
         <h4>
           {{ houseCounter }} Annunci
         </h4>
+        <q-btn
+          unelevated
+          outline
+          icon="refresh"
+          @click="$store.dispatch('getHouses')"
+        />
         <span>ultimo aggiornamento: {{ lastUpdate }}</span>
         <q-toggle
           v-model="isHidden"
@@ -308,9 +314,7 @@ export default {
       this.updateFilter({ key: 'search', value: this.selectedSearch.value })
       this.$store.dispatch('getHouses')
     })
-    setInterval(() => this.$store.dispatch('getHouses'), 600000)
   },
-
   methods: {
     ...mapMutations(['updateFilter']),
     onSearchChange (value) {
