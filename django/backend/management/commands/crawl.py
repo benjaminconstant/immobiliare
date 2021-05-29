@@ -26,8 +26,3 @@ class Command(BaseCommand):
         process.crawl(CasaDaPrivatoSpider)
         process.crawl(ImmobiliareSpider)
         process.start()
-
-        not_updated = House.objects.filter(has_changed=False)
-        for house in not_updated:
-            print('deleting: ' + house.link)
-        not_updated.delete()

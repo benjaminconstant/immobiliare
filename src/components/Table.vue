@@ -83,7 +83,11 @@
       </q-td>
     </template>
     <template #body-cell-title="props">
-      <q-td class="text-center" style="max-width: 400px">
+      <q-td
+        :class="{'bg-red' : !props.row.has_changed}"
+        class="text-center"
+        style="max-width: 400px"
+      >
         {{ props.row.title }}
         <q-tooltip
           content-class="bg-dark"
@@ -201,7 +205,7 @@ export default {
           name: 'title',
           label: 'Titolo',
           align: 'left',
-          field: row => row.title,
+          field: row => row.has_changed,
           sortable: true
         },
         {
