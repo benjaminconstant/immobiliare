@@ -119,7 +119,7 @@
     <template #body-cell-price_mq="props">
       <q-td class="text-center">
         <span :class="price_mqColor(props.row.price_mq)">
-          {{ props.row.price_mq.toFixed(2) }}
+          {{ props.row.price_mq | currency }}
         </span>
       </q-td>
     </template>
