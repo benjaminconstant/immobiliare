@@ -65,7 +65,7 @@ const Store = new Vuex.Store({
       api.put('houses/' + house.id + '/', house)
     },
     deleteHouse ({ dispatch }, house) {
-      api.delete('houses/' + house.id + '/').then(r => dispatch('getHouses').then(r => Notify.create({ message: 'eliminata' + house.title, color: 'negative' })))
+      api.delete('houses/' + house.id + '/').then(r => dispatch('getHouses').then(r => Notify.create({ message: 'eliminata ' + house.title, color: 'negative' })))
     },
     putHidden ({ commit }, house) {
       house.is_hidden = !house.is_hidden
