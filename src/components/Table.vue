@@ -102,6 +102,13 @@
         >
           {{ props.row.text }}
         </q-tooltip>
+        <q-icon
+          v-if="!props.row.has_changed"
+          size="lg"
+          color="negative"
+          name="delete"
+          @click="$store.dispatch('deleteHouse', props.row)"
+        />
       </q-td>
     </template>
     <template #body-cell-is_interesting="props">

@@ -64,12 +64,16 @@ const Store = new Vuex.Store({
     putNote ({ commit }, house) {
       api.put('houses/' + house.id + '/', house)
     },
+    deleteHouse ({ dispatch }, house) {
+      api.delete('houses/' + house.id + '/').then(r => dispatch('getHouses').then(r => Notify.create({ message: 'eliminata' + house.title, color: 'negative' })))
+    },
     putHidden ({ commit }, house) {
       house.is_hidden = !house.is_hidden
-      api.put('houses/' + house.id + '/', house)
-      Notify.create({
-        message: (house.is_hidden ? 'Nascosta: ' : 'Ripristinata: ') + house.title,
-        color: house.is_hidden ? 'negative' : 'positive'
+      api.put('houses/' + house.id + '/', house).then(r => {
+        Notify.create({
+          message: (house.is_hidden ? 'Nascosta: ' : 'Ripristinata: ') + house.title,
+          color: house.is_hidden ? 'negative' : 'positive'
+        })
       })
     }
   },
