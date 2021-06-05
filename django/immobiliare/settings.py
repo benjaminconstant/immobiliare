@@ -63,7 +63,7 @@ if not PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3'
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 else:
@@ -71,7 +71,7 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'OPTIONS': {
-                'read_default_file': BASE_DIR / 'db_sample.cnf'
+                'read_default_file': os.path.join(BASE_DIR, 'db_sample.cnf'),
             },
         }
     }
