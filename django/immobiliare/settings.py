@@ -71,7 +71,7 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'OPTIONS': {
-                'read_default_file': config('DB_CONFIG_PATH', default='./sample.cnf'),
+                'read_default_file': BASE_DIR / 'db_sample.cnf'
             },
         }
     }
