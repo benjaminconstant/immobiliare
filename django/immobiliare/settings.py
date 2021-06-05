@@ -70,9 +70,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'OPTIONS': {
-                'read_default_file': os.path.join(BASE_DIR, 'db_sample.cnf'),
-            },
+            'NAME': 'immobiliare$djangodb',
+            'USER': 'immobiliare',
+            'PASSWORD': 'ozCCl5K6%y16',
+            'HOST': 'immobiliare.mysql.pythonanywhere-services.com',
         }
     }
 
