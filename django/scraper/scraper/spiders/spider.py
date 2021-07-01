@@ -35,8 +35,7 @@ class ImmobiliareSpider(scrapy.Spider):
             yield scrapy.Request(url, self.parse_detail, cb_kwargs=dict(search=search))
 
         next_page = response.url + '&pag=' + str(page+1)
-        if next_page is not None:
-            yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
+        yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
     def parse_detail(self, response, search):
         h = HouseItem()
@@ -48,6 +47,7 @@ class ImmobiliareSpider(scrapy.Spider):
         h['price_mq'] = round(h['price']/h['mq'], 2)
         h['title'] = response.css('span.im-titleBlock__title::text').get()
         h['link'] = response.url
+        h['is_private'] = response.css('div.im-lead__supervisor > div > p::text').get() == 'Privato'
 
         # date
         date_raw = response.xpath('//dt[text()[contains(., "riferimento e Data annuncio")]]/following-sibling::dd/node()').get().strip()
@@ -67,8 +67,6 @@ class ImmobiliareSpider(scrapy.Spider):
             h['state'] = self.STATE_CHOICES[response.xpath('//dt[text()[contains(., "stato")]]/following-sibling::dd/node()').get().strip()]
         except:
             h['state'] = self.STATE_CHOICES['N.D.']
-
-        h['is_private'] = response.css('div.im-lead__supervisor > div > p::text').get() == 'Privato'
 
         obj_list = House.objects.filter(uid=h['uid'])
         for obj in obj_list:
