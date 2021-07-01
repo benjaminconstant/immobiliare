@@ -1,3 +1,6 @@
+from decouple import config
+PRODUCTION = config('PRODUCTION', default=False)
+
 # Scrapy settings for scraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -14,11 +17,15 @@ NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 
 # custom
 
-LOG_LEVEL = 'WARNING'
+LOG_LEVEL = 'WARNING'  # if PRODUCTION else 'DEBUG'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scraper (+http://www.yourdomain.com)'
+FAKEUSERAGENT_PROVIDERS = [
+    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
+    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
+    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
+]
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -54,9 +61,12 @@ COOKIES_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'scraper.middlewares.ScraperDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

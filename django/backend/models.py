@@ -49,7 +49,7 @@ class House(models.Model):
     search = models.ForeignKey(Search, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return self.title or self.uid
 
 
 class Image(models.Model):

@@ -24,48 +24,32 @@ class ImmobiliareSpider(scrapy.Spider):
             yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
     def parse(self, response, search, page):
-
-        house_counter = response.css('span.visible-xs-inline::text').get()
-        house_container = response.css('li.listing-item.js-row-detail')
+        ad_url_list = response.css('a[id]::attr(href)').getall()
         page += 1
-        print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(house_container)) + ' annunci)')
+        print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(ad_url_list)) + ' annunci)')
 
-        for house in house_container:
-            h = HouseItem()
-            h['search'] = search
-            h['uid'] = house.css('::attr(data-id)').get()
-            try:
-                h['price'] = float(house.css('li.lif__item.lif__pricing::text').get().strip().split('€ ')[1].replace('.', ''))
-            except:
-                h['price'] = float(house.css('li.lif__item.lif__pricing > div::text').get().strip().split('€ ')[1].replace('.', ''))
-            h['title'] = house.css('p.titolo.text-primary > a::text').get().strip()
-            h['link'] = house.css('p.titolo.text-primary > a::attr(href)').get()
-            try:
-                h['mq'] = int(house.xpath('.//div[text()[contains(., "superficie")]]/preceding-sibling::div/span/node()').get().replace('.', ''))
-                h['price_mq'] = round(h['price']/h['mq'], 2)
-            except:
-                h['mq'] = None
-                h['price_mq'] = None
+        for url in ad_url_list:
+            obj, created = House.objects.get_or_create(uid=url.split('/')[-2], search=search)
+            if created:
+                print('created: ' + url + ' search: ' + search.name)
+            yield scrapy.Request(url, self.parse_detail, cb_kwargs=dict(search=search))
 
-            obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
-            obj.title = h['title']
-            obj.price = h['price']
-            obj.link = h['link']
-            obj.mq = h['mq']
-            obj.price_mq = h['price_mq']
-            obj.has_changed = True
-            obj.save()
-
-            print(('created: ' if created else 'updated: ') + obj.link + ' ' + h['search'].name)
-
-            yield scrapy.Request(h['link'], self.parse_detail, cb_kwargs=dict(h=h))
-
-        next_page = response.css('a[title="Pagina successiva"]::attr(href)').get()
+        next_page = response.url + '&pag=' + str(page+1)
         if next_page is not None:
             yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
-    def parse_detail(self, response, h):
+    def parse_detail(self, response, search):
+        h = HouseItem()
+        h['search'] = search
+        h['uid'] = response.url.split('/')[-2]
         h['text'] = ''.join(response.css('div.im-description__text.js-readAllText::text').getall()).strip()
+        h['price'] = float(response.xpath('//dt[text()[contains(., "prezzo")]]/following-sibling::dd/node()').get().strip().split('€ ')[1].replace('.', ''))
+        h['mq'] = int(response.xpath('//dt[text()[contains(., "superficie")]]/following-sibling::dd/node()').get().split()[0])
+        h['price_mq'] = round(h['price']/h['mq'], 2)
+        h['title'] = response.css('span.im-titleBlock__title::text').get()
+        h['link'] = response.url
+
+        # date
         date_raw = response.xpath('//dt[text()[contains(., "riferimento e Data annuncio")]]/following-sibling::dd/node()').get().strip()
         match = re.search('\d{2}/\d{2}/\d{4}', date_raw)
         h['date_publish'] = datetime.strptime(match.group(), '%d/%m/%Y').date()
@@ -88,17 +72,21 @@ class ImmobiliareSpider(scrapy.Spider):
 
         obj_list = House.objects.filter(uid=h['uid'])
         for obj in obj_list:
+            obj.date_publish = h['date_publish']
+            obj.title = h['title']
+            obj.link = h['link']
             obj.state = h['state']
             obj.text = h['text']
+            obj.price = h['price']
+            obj.price_mq = h['price_mq']
+            obj.mq = h['mq']
             obj.costs = h['costs']
-            obj.date_publish = h['date_publish']
             obj.is_private = h['is_private']
+            obj.has_changed = True
             obj.save()
-
             for image in response.css('img.nd-ratio__img::attr(src)').getall()[:3]:
                 i = Image.objects.get_or_create(house=obj, url=image)
-
-            print('deep updated: ' + obj.link)
+            print(('updated: ') + obj.link + ' ' + h['search'].name)
 
 
 class CasaDaPrivatoSpider(scrapy.Spider):
