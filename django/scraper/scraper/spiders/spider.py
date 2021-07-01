@@ -24,7 +24,7 @@ class ImmobiliareSpider(scrapy.Spider):
             yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
     def parse(self, response, search, page):
-        ad_url_list = response.css('a[id]::attr(href)').getall()
+        ad_url_list = response.css('a.Card_in-card__title__234gH::attr(href)').getall()
         page += 1
         print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(ad_url_list)) + ' annunci)')
 
@@ -34,8 +34,9 @@ class ImmobiliareSpider(scrapy.Spider):
                 print('created: ' + url + ' search: ' + search.name)
             yield scrapy.Request(url, self.parse_detail, cb_kwargs=dict(search=search))
 
-        next_page = response.url + '&pag=' + str(page+1)
-        yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
+        next_page = response.css('div[data-cy="pagination-next"] > a.Pagination_in-pagination__item__1fF3O::attr(href)').get()
+        if next_page is not None:
+            yield scrapy.Request(next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
 
     def parse_detail(self, response, search):
         h = HouseItem()
