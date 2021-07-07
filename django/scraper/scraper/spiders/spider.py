@@ -25,8 +25,8 @@ class ImmobiliareSpider(scrapy.Spider):
             yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page), meta={'selenium': True})
 
     def parse(self, response, search, page):
-        with open(os.getcwd() + '/' + response.url[-15:] + '.html', 'wb') as f:
-            f.write(response.body)
+        # with open(os.getcwd() + '/' + response.url[-15:] + '.html', 'wb') as f:
+        #    f.write(response.body)
         ad_url_list = response.css('a.Card_in-card__title__234gH::attr(href)').getall()
         page += 1
         print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(ad_url_list)) + ' annunci)')
