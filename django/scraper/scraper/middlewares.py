@@ -34,10 +34,8 @@ class seleniumCustomMiddleware(object):
         # only process tagged request or delete this if you want all
         if not request.meta.get('selenium'):
             return
-        print(request.url)
         self.driver.get(request.url)
         element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "a.Card_in-card__title__234gH")))
-        print(element)
         body = self.driver.page_source
         response = HtmlResponse(url=self.driver.current_url, body=body, encoding='utf-8')
         return response
