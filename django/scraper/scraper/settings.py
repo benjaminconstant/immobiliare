@@ -22,7 +22,7 @@ NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 LOG_LEVEL = 'WARNING'  # if PRODUCTION else 'DEBUG'
 
 SELENIUM_DRIVER_NAME = 'chrome'
-SELENIUM_DRIVER_EXECUTABLE_PATH = '/usr/lib/python3.8/site-packages/selenium/webdriver/chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = '/usr/local/bin/chromedriver' if PRODUCTION else '/snap/bin/chromium.chromedriver'
 SELENIUM_DRIVER_ARGUMENTS = ['--headless']  # '--headless' if using chrome instead of firefox
 
 # Obey robots.txt rules
