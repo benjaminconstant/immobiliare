@@ -4,9 +4,37 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.http import HtmlResponse
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
+
+class seleniumCustomMiddleware(object):
+    def __init__(self):
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')  # your chosen driver
+
+    def spider_closed(self, spider):
+        self.driver.close()
+
+    def process_request(self, request, spider):
+        # only process tagged request or delete this if you want all
+        if not request.meta.get('selenium'):
+            return
+        print(request.url)
+        self.driver.get(request.url)
+        element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "a.Card_in-card__title__234gH")))
+        print(element)
+        body = self.driver.page_source
+        response = HtmlResponse(url=self.driver.current_url, body=body, encoding='utf-8')
+        return response
 
 
 class ScraperSpiderMiddleware:

@@ -1,3 +1,4 @@
+import os
 import scrapy
 from backend.models import House, Search, Image
 from ..items import HouseItem
@@ -5,7 +6,6 @@ import re
 from django.utils import timezone
 from datetime import datetime, timedelta
 import locale
-from scrapy_selenium import SeleniumRequest
 locale.setlocale(locale.LC_ALL, 'it_IT')
 
 
@@ -22,9 +22,11 @@ class ImmobiliareSpider(scrapy.Spider):
     def start_requests(self):
         for search in Search.objects.filter(platform=1):
             page = 0
-            yield SeleniumRequest(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page))
+            yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page), meta={'selenium': True})
 
     def parse(self, response, search, page):
+        with open(os.getcwd() + '/' + response.url[-15:] + '.html', 'wb') as f:
+            f.write(response.body)
         ad_url_list = response.css('a.Card_in-card__title__234gH::attr(href)').getall()
         page += 1
         print('pag: ' + str(page) + ' ' + search.name + ' ' + '(' + str(len(ad_url_list)) + ' annunci)')
@@ -33,11 +35,11 @@ class ImmobiliareSpider(scrapy.Spider):
             obj, created = House.objects.get_or_create(uid=url.split('/')[-2], search=search)
             if created:
                 print('created: ' + url + ' search: ' + search.name)
-            yield SeleniumRequest(url=url, callback=self.parse_detail, cb_kwargs=dict(search=search))
+            yield scrapy.Request(url=url, callback=self.parse_detail, cb_kwargs=dict(search=search))
 
         next_page = response.css('div[data-cy="pagination-next"] > a.Pagination_in-pagination__item__1fF3O::attr(href)').get()
         if next_page is not None:
-            yield SeleniumRequest(url=next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page))
+            yield scrapy.Request(url=next_page, callback=self.parse, cb_kwargs=dict(search=search, page=page), meta={'selenium': True})
 
     def parse_detail(self, response, search):
         h = HouseItem()
