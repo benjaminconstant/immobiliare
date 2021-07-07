@@ -3,6 +3,7 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from itemadapter import is_item, ItemAdapter
 from scrapy import signals
 from scrapy.http import HtmlResponse
 from selenium import webdriver
@@ -10,16 +11,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from decouple import config
+
+PRODUCTION = config('PRODUCTION', default=False)
 
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
 
 
 class seleniumCustomMiddleware(object):
     def __init__(self):
         options = Options()
         options.headless = True
-        self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')  # your chosen driver
+        if PRODUCTION:
+            self.driver = webdriver.Chrome(options=options)
+        else:
+            self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')
 
     def spider_closed(self, spider):
         self.driver.close()
