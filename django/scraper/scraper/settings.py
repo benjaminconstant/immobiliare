@@ -22,7 +22,7 @@ NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 LOG_LEVEL = 'WARNING'  # if PRODUCTION else 'DEBUG'
 
 SELENIUM_DRIVER_NAME = 'chrome'
-SELENIUM_DRIVER_EXECUTABLE_PATH = which('geckodriver')
+SELENIUM_DRIVER_EXECUTABLE_PATH = ''
 SELENIUM_DRIVER_ARGUMENTS = ['--headless']  # '--headless' if using chrome instead of firefox
 
 # Obey robots.txt rules
