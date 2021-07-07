@@ -1,4 +1,6 @@
 from decouple import config
+from shutil import which
+
 PRODUCTION = config('PRODUCTION', default=False)
 
 # Scrapy settings for scraper project
@@ -19,13 +21,9 @@ NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 
 LOG_LEVEL = 'WARNING'  # if PRODUCTION else 'DEBUG'
 
-
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-FAKEUSERAGENT_PROVIDERS = [
-    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
-    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
-    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
-]
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = '/snap/bin/chromium.chromedriver'
+SELENIUM_DRIVER_ARGUMENTS = ['--headless']  # '--headless' if using chrome instead of firefox
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -62,10 +60,7 @@ COOKIES_ENABLED = False
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+    'scrapy_selenium.SeleniumMiddleware': 800
 }
 
 # Enable or disable extensions
