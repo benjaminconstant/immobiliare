@@ -267,7 +267,16 @@ export default {
         },
         // definita per poter utilizzare ricerca, non visibile
         {
-          name: 'text',
+          name: 'titleSearch',
+          headerStyle: 'display: none',
+          style: 'display: none',
+          label: 'Titolo',
+          align: 'left',
+          field: row => row.title
+        },
+        // definita per poter utilizzare ricerca, non visibile
+        {
+          name: 'textSearch',
           headerStyle: 'display: none',
           style: 'display: none',
           label: 'Descrizione',
