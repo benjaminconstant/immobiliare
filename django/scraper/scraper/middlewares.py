@@ -28,6 +28,7 @@ class seleniumCustomMiddleware(object):
             self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')
 
     def close_spider(self, spider):
+        print('closing browser')
         self.driver.close()
 
     def process_request(self, request, spider):
