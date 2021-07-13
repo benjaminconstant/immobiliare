@@ -27,7 +27,7 @@ class seleniumCustomMiddleware(object):
         else:
             self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')
 
-    def spider_closed(self, spider):
+    def close_spider(self, spider):
         self.driver.close()
 
     def process_request(self, request, spider):
@@ -38,7 +38,6 @@ class seleniumCustomMiddleware(object):
         element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "a.Card_in-card__title__234gH")))
         body = self.driver.page_source
         response = HtmlResponse(url=self.driver.current_url, body=body, encoding='utf-8')
-        self.driver.close()
         return response
 
 
