@@ -27,12 +27,13 @@ class seleniumCustomMiddleware(object):
         else:
             self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')
 
+    @classmethod
     def from_crawler(cls, crawler):
         s = cls()
         crawler.signals.connect(s.spider_closed, signal=signals.spider_closed)
         return s
 
-    def spider_closed(self, spider):
+    def spider_closed(self):
         print('closing browser')
         self.driver.close()
 
