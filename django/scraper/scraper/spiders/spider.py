@@ -20,7 +20,7 @@ class ImmobiliareSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        for search in Search.objects.filter(platform=1):
+        for search in Search.objects.filter(platform=1, is_active=True):
             page = 0
             yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page), meta={'selenium': True})
 

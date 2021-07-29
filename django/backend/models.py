@@ -21,6 +21,7 @@ class Search(models.Model):
     name = models.CharField(max_length=1000, null=False)
     link = models.CharField(max_length=1000, null=True, blank=True)
     platform = models.IntegerField(null=False, choices=PLATFORM_CHOICES)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
