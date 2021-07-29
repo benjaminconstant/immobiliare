@@ -16,7 +16,6 @@ class SearchAdmin(admin.ModelAdmin):
     ordering = ['name']
     search_fields = ['name', 'link']
     list_display = ['name', 'link']
-
     readonly_fields = ['created', 'updated']
 
 
