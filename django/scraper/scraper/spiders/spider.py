@@ -146,7 +146,7 @@ class CasaDaPrivatoSpider(scrapy.Spider):
 
         h['text'] = response.css('div.section-data > div.col-sm-12.section-margin.text-justify::text').get().strip()
 
-        if h['price'] <= 100000:
+        if h['price'] <= 120000:
             obj, created = House.objects.get_or_create(uid=h['uid'], search=search)
             obj.title = h['title']
             obj.link = h['link']
