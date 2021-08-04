@@ -20,6 +20,7 @@ class Search(models.Model):
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=1000, null=False)
     link = models.CharField(max_length=1000, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     platform = models.IntegerField(null=False, choices=PLATFORM_CHOICES)
 
     def __str__(self):
