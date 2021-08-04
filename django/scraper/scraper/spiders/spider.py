@@ -20,7 +20,7 @@ class ImmobiliareSpider(scrapy.Spider):
     }
 
     def start_requests(self):
-        for search in Search.objects.filter(platform=1):
+        for search in Search.objects.filter(platform=1, is_active=True):
             page = 0
             yield scrapy.Request(url=search.link, callback=self.parse, cb_kwargs=dict(search=search, page=page), meta={'selenium': True})
 
@@ -113,7 +113,7 @@ class CasaDaPrivatoSpider(scrapy.Spider):
             'https://www.casadaprivato.it/annunci-vendita/immobili/monza_brianza-vimercate',
             'https://www.casadaprivato.it/annunci-vendita/immobili/lecco-casatenovo'
         ]
-        for search in Search.objects.filter(platform=2):
+        for search in Search.objects.filter(platform=2, is_active=True):
             for url in start_urls:
                 page = 0
                 yield scrapy.Request(url=url, callback=self.parse, cb_kwargs=dict(page=page, search=search,))
