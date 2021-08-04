@@ -46,10 +46,7 @@ class ImmobiliareSpider(scrapy.Spider):
         h['search'] = search
         h['uid'] = response.url.split('/')[-2]
         h['text'] = ''.join(response.css('div.im-description__text.js-readAllText::text').getall()).strip()
-        try:
-            price_raw = response.xpath('//dt[text()[contains(., "prezzo")]]/following-sibling::dd/node()').get().replace('.', '')
-        except:
-            price_raw = response.xpath('//dt[text()[contains(., "offerta")]]/following-sibling::dd/node()').get().replace('.', '')
+        price_raw = response.css('div.im-mainFeatures__title').get().replace('.', '')
         h['price'] = float(re.findall('\d+', price_raw)[0])
         mq_raw = response.xpath('//dt[text()[contains(., "superficie")]]/following-sibling::dd/node()').get().replace('.', '')
         h['mq'] = int(re.findall('\d+', mq_raw)[0])
