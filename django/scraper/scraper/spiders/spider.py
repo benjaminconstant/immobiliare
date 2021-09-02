@@ -90,8 +90,9 @@ class ImmobiliareSpider(scrapy.Spider):
             obj.is_private = h['is_private']
             obj.has_changed = True
             obj.save()
+            Image.objects.all().delete()
             for image in response.css('img.nd-ratio__img::attr(src)').getall()[:3]:
-                i = Image.objects.get_or_create(house=obj, url=image)
+                i = Image.objects.create(house=obj, url=image)
             print(('updated: ') + obj.link + ' ' + h['search'].name)
 
 
