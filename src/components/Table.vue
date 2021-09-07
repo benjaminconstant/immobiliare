@@ -294,7 +294,8 @@ export default {
           name: 'note',
           label: 'Note',
           align: 'left',
-          field: row => row.note
+          field: row => row.note,
+          sortable: true
         }
       ]
     }
