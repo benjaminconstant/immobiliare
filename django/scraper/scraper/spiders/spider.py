@@ -6,7 +6,7 @@ import re
 from django.utils import timezone
 from datetime import datetime, timedelta
 import locale
-locale.setlocale(locale.LC_ALL, 'it_IT')
+locale.setlocale(locale.LC_ALL, 'it_IT.UTF-8')
 
 
 class ImmobiliareSpider(scrapy.Spider):
