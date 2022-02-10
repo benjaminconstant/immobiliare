@@ -1,5 +1,9 @@
-source `which virtualenvwrapper.sh`
-workon immobiliare
+#!/bin/bash
+set -e
+
+ENV=immobiliare
+
+source $WORKON_HOME/$ENV/bin/activate
 git pull
 cd django
 pip install -r requirements.txt
