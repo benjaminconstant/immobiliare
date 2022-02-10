@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ENV=t4_catalog
+ENV=immobiliare
 
 source $WORKON_HOME/$ENV/bin/activate
 yarn install
