@@ -2,8 +2,6 @@ from pathlib import Path
 import os
 from decouple import config
 
-# staicas
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 PRODUCTION = config('PRODUCTION', default=False)
