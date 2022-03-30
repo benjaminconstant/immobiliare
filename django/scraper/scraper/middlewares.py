@@ -39,7 +39,11 @@ class seleniumCustomMiddleware(object):
         if not request.meta.get('selenium'):
             return
         self.driver.get(request.url)
-        element = WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, "a.in-card__title")))
+        try:
+            element = WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, "a.in-card__title")))
+        except Exception as e:
+            print(e)
+            self.driver.save_screenshot("screenshot.png")
         body = self.driver.page_source
         response = HtmlResponse(url=self.driver.current_url, body=body, encoding='utf-8')
         return response
