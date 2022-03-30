@@ -11,7 +11,7 @@ DEBUG = not PRODUCTION
 
 if PRODUCTION:
     print('Running in PRODUCTION mode')
-    ALLOWED_HOSTS = ['immobiliare.eu.pythonanywhere.com']
+    ALLOWED_HOSTS = ['www.ghiga.top']
 else:
     print('Running in DEVELOPMENT mode')
     ALLOWED_HOSTS = ['*']
