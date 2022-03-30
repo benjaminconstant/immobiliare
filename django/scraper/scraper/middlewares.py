@@ -3,29 +3,26 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from itemadapter import is_item, ItemAdapter
 from scrapy import signals
 from scrapy.http import HtmlResponse
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
 from decouple import config
-
-PRODUCTION = config('PRODUCTION', default=False)
+from django.conf import settings
 
 # useful for handling different item types with a single interface
 
 
 class seleniumCustomMiddleware(object):
     def __init__(self):
-        options = Options()
-        options.headless = True
-        if PRODUCTION:
-            self.driver = webdriver.Chrome(options=options)
-        else:
-            self.driver = webdriver.Chrome(options=options, executable_path='/snap/bin/chromium.chromedriver')
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        if settings.PRODUCTION:
+            chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-gpu")
+        self.driver = webdriver.Chrome(options=chrome_options)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -35,7 +32,7 @@ class seleniumCustomMiddleware(object):
 
     def spider_closed(self):
         print('closing browser')
-        self.driver.close()
+        self.driver.quit()
 
     def process_request(self, request, spider):
         # only process tagged request or delete this if you want all
